@@ -79,3 +79,37 @@ scala> User("Foo", 100)
 <scala.util.Either[String,User] = Right(User(ABC,11))
 
 more examples: https://github.com/fthomas/refined
+
+S.32 monocle and circe
+>path.as[String].getOption(CityLots.sampleData)
+<Option[String] = Some(0005001)
+
+>path.as[Char].getOption(CityLots.sampleData)
+<Option[Char] = None
+
+-> go into the data and make the change and return an new object of the same type inclusive with the change
+-> real power of lenses ;)
+>path.json.modify(_ => List(12,3,4,5).asJson)(CityLots.sampleData).noSpaces
+<[{"type":"Feature","properties":{"MAPBLKLOT":"0001001","BLKLOT":"0001001","BLOCK_NUM":"0001","LOT_NUM":"001","FROM_ST":"0","TO_ST":"0","STREET":"UNKNOWN","ST_TYPE":null,"ODD_EVEN":"E"},"geometry":{"type":"Polygon","coordinates":[[[-122.422003528252475,37.808480096967251,0.0],[-122.422076013325281,37.808835019815085,0.0],[-122.421102174348633,37.808803534992904,0.0],[-122.421062569067274,37.808601056818148,0.0],[-122.422003528252475,37.808480096967251,0.0]]]}},{"type":"Feature","properties":{"MAPBLKLOT":"0002001","BLKLOT":"0002001","BLOCK_NUM":"0002","LOT_NUM":"001","FROM_ST":"0","TO_ST":"0","STREET":"UNKNOWN","ST_TYPE":null,"ODD_EVEN":"E"},"geometry":{"type":"Polygon","coordinates":[[[-122.42082593937107,37.808631474146033,0.0],[-122.42085804967...
+
+
+change the path to a specific location
+>val path = JsonPath.root.each.properties.MAPBKLOT
+<path: io.circe.optics.JsonTraversalPath = JsonTraversalPath(monocle.PTraversal$$anon$2@77b9f50c)
+
+>path.json.modify(_ => Json.Null)(CityLots.sampleData).noSpaces
+<String = [{"type":"Feature","properties":{"MAPBLKLOT":"0001001","BLKLOT":"0001001","BLOCK_NUM":"0001","LOT_NUM":"001","FROM_ST":"0","TO_ST":"0","STREET":"UNKNOWN","ST_TYPE":null,"ODD_EVEN":"E"},"geometry":{"type":"Polygon","coordinates":[[[-122.422003528252475,37.808480096967251,0.0],[-122.422076013325281,37.808835019815085,0.0],[-122.421102174348633,37.808803534992904,0.0],[-122.421062569067274,37.808601056818148,0.0],[-122.422003528252475,37.808480096967251,0.0]]]}},{"type":"Feature","properties":{"MAPBLKLOT":"0002001","BLKLOT":"0002001","BLOCK_NUM":"0002","LOT_NUM":"001","FROM_ST":"0","TO_ST":"0","STREET":"UNKNOWN","ST_TYPE":null,"ODD_EVEN":"E"},"geometry":{"type":"Polygon","coordinates":[[[-122.42082593937107,37.808631474146033,0.0],[-122.42085804967...
+
+(moar) talk about monocle: https://www.youtube.com/watch?v=NvCcNM2vp3k
+application of monocle: 
+* works also on case classes....
+* go into embedded resources and create instances by using a decoder with this properties...
+
+s.34 chunked json bytes
+-> CityLots.scala:72
+
+>parsedStream.foldMap(_ => 1).runLast.unsafeRunSync
+<Option[Int] = Some(251)
+-> how to get the data?
+
+-> ! scala-check is only available into the test scope...
