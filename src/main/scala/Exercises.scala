@@ -14,7 +14,8 @@ object Ex1 {
    * Write a decoder for this polygon type that works with the city lots
    * examples.
    */
-  def decodePolygon: Decoder[Polygon] = ???
+  def decodePolygon: Decoder[Polygon] =
+    Decoder[List[List[Coord]]].prepare(_.downField("coordinates")).map(Polygon(_))
 }
 
 object Ex2 {
