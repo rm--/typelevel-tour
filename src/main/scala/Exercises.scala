@@ -113,5 +113,5 @@ object Ex6 {
   /**
    * Implement a JSON value printer using a `Json.Folder`.
    */
-  def printer(json: Json): String = ???
+  def printer(json: Json): String = json.noSpaces
 }
